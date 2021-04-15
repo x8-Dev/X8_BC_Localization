@@ -1,6 +1,6 @@
 page 50108 "WHT Entries List"
 {
-    PageType = list;
+    PageType = List;
     ApplicationArea = All;
     UsageCategory = Administration;
     SourceTable = "WHT Entries";
