@@ -9,7 +9,7 @@ page 50108 "WHT Entries List"
     {
         area(Content)
         {
-            group(GroupName)
+            repeater(GroupName)
             {
                 field("Entry No."; rec."Entry No.")
                 {
@@ -168,8 +168,12 @@ page 50108 "WHT Entries List"
                 }
             }
         }
-    }
 
+        area(Factboxes)
+        {
+
+        }
+    }
     actions
     {
         area(Processing)
