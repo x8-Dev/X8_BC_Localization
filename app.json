@@ -1,6 +1,6 @@
 {
   "id": "edb3f2f0-3174-4352-baa3-fd9f9c447b43",
-  "name": "ALProject4",
+  "name": "X8_BC_Localization",
   "publisher": "Default publisher",
   "version": "1.0.0.0",
   "brief": "",
@@ -20,7 +20,7 @@
       "to": 50149
     }
   ],
-  "contextSensitiveHelpUrl": "https://ALProject4.com/help/",
+  "contextSensitiveHelpUrl": "https://X8_BC_Localization.com/help/",
   "showMyCode": true,
   "runtime": "7.0"
 }
