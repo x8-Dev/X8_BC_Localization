@@ -6,7 +6,7 @@
             "request": "launch",
             "type": "al",
             "environmentType": "Sandbox",
-            "environmentName": "X8_Development",
+            "environmentName": "X8_Dev",
             "startupObjectId": 22,
             //"tenant": "43d491ee-0a80-8/473b-a8b0-937cba92c1ce",
             "startupObjectType": "Page",
