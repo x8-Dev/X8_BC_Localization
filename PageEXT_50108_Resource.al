@@ -4,7 +4,7 @@ pageextension 50108 ResourceEXT extends "Resource List"
     {
         addafter("Default Deferral Template Code")
         {
-            field("WHT Business Posting Group"; Rec."WHT Business Posting Group")
+            field("WHT Product Posting Group"; Rec."WHT Product Posting Group")
             {
                 ApplicationArea = All;
             }
