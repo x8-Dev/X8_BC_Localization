@@ -7,6 +7,14 @@ tableextension 50109 PurchaseHeaderEXT extends "Purchase Header"
             DataClassification = ToBeClassified;
             TableRelation = "WHT Business Posting Group";
         }
+        field(50101; "WHT Amount"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50102; "Net Amount"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 
     var
