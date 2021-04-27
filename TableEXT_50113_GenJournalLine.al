@@ -12,6 +12,10 @@ tableextension 50113 GenJournalLineEXT extends "Gen. Journal Line"
             DataClassification = ToBeClassified;
             TableRelation = "WHT Product Posting Group";
         }
+        field(50102; "WHT Payment"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 
     var
