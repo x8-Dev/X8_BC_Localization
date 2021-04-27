@@ -13,6 +13,19 @@ pageextension 50127 SalesInvoiceSubformEXT extends "Sales Invoice Subform"
                 ApplicationArea = All;
             }
         }
+
+        addafter("Total Amount Incl. VAT")
+        {
+            field("WHT Amount"; rec."WHT Amount")
+            {
+                ApplicationArea = All;
+            }
+            field("Net Amount"; rec."Net Amount")
+            {
+                ApplicationArea = All;
+            }
+
+        }
     }
 
     actions
