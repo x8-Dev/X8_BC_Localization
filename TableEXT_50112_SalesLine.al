@@ -5,12 +5,12 @@ tableextension 50112 SalesLineEXT extends "Sales line"
         field(50100; "WHT Business Posting Group"; Code[20])
         {
             DataClassification = ToBeClassified;
-            TableRelation = "WHT Business Posting Group";
+            TableRelation = "WHT Business Posting Group".code;
         }
         field(50101; "WHT Product Posting Group"; Code[20])
         {
             DataClassification = ToBeClassified;
-            TableRelation = "WHT Product Posting Group";
+            TableRelation = "WHT Product Posting Group".code;
         }
         field(50102; "WHT Amount"; Decimal)
         {
