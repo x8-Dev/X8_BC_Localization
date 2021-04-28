@@ -10,10 +10,12 @@ tableextension 50109 PurchaseHeaderEXT extends "Purchase Header"
         field(50101; "WHT Amount"; Decimal)
         {
             DataClassification = ToBeClassified;
+            ObsoleteState = Removed;
         }
         field(50102; "Net Amount"; Decimal)
         {
             DataClassification = ToBeClassified;
+            ObsoleteState = Removed;
         }
     }
 
