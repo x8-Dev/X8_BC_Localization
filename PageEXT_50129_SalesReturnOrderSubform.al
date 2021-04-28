@@ -13,6 +13,18 @@ pageextension 50129 SalesReturnOrderSubformEXT extends "Sales Return Order Subfo
                 ApplicationArea = All;
             }
         }
+        addafter("Total Amount Incl. VAT")
+        {
+            field("WHT Amount"; rec."WHT Amount")
+            {
+                ApplicationArea = All;
+            }
+            field("Net Amount"; rec."Net Amount")
+            {
+                ApplicationArea = All;
+            }
+
+        }
     }
 
     actions
