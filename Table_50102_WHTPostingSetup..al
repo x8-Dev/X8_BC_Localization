@@ -1,6 +1,8 @@
 table 50102 "WHT Posting Setup"
 {
     DataClassification = ToBeClassified;
+    ObsoleteState = Removed;
+    ObsoleteReason = 'Change of Primary Key';
 
     fields
     {
@@ -25,7 +27,7 @@ table 50102 "WHT Posting Setup"
         field(5; "WHT Revenue Type"; Code[10])
         {
             DataClassification = ToBeClassified;
-            TableRelation = "WHT Product Posting Group";
+            TableRelation = "WHT Revenue Type";
         }
         field(6; "BIR Form"; Code[20])
         {
@@ -53,10 +55,10 @@ table 50102 "WHT Posting Setup"
 
     keys
     {
-        /* key(Key1; MyField)
-         {
-             Clustered = true;
-         }*/
+        key(Key1; "WHT Business Posting Group")
+        {
+
+        }
     }
 
     var
