@@ -13,6 +13,18 @@ pageextension 50138 PostedSalesInvoiceSubformEXT extends "Posted Sales Invoice S
                 ApplicationArea = All;
             }
         }
+        addafter("Total Amount Incl. VAT")
+        {
+            field("WHT Amount"; rec."WHT Amount")
+            {
+                ApplicationArea = All;
+            }
+            field("Net Amount"; rec."Net Amount")
+            {
+                ApplicationArea = All;
+            }
+
+        }
     }
 
     actions
