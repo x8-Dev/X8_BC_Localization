@@ -69,6 +69,6 @@ pageextension 50113 PurchaseOrderSubformEXT extends "Purchase Order Subform"
 
     var
         myInt: Integer;
-        WHTPostingSetupRec: Record "WHT Posting Setup";
+        WHTPostingSetupRec: Record "WHT Posting Set";
         PurchaseHeaderRec: Record "Purchase Header";
 }

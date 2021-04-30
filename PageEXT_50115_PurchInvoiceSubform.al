@@ -65,6 +65,6 @@ pageextension 50115 PurchInvoiceSubformEXT extends "Purch. Invoice Subform"
 
     var
         myInt: Integer;
-        WHTPostingSetupRec: Record "WHT Posting Setup";
+        WHTPostingSetupRec: Record "WHT Posting Set";
         PurchaseHeaderRec: Record "Purchase Header";
 }

@@ -65,7 +65,7 @@ pageextension 50111 PuchaseQuoteSubformEXT extends "Purchase Quote Subform"
 
     var
         myInt: Integer;
-        WHTPostingSetupRec: Record "WHT Posting Setup";
+        WHTPostingSetupRec: Record "WHT Posting Set";
         PurchaseHeaderRec: Record "Purchase Header";
 
 }
