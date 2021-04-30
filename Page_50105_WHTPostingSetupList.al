@@ -3,7 +3,7 @@ page 50105 "WHT Posting Setup List"
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Lists;
-    SourceTable = "WHT Posting Setup";
+    SourceTable = "WHT Posting Set";
 
     layout
     {
