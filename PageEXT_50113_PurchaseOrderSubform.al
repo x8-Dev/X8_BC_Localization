@@ -48,9 +48,16 @@ pageextension 50113 PurchaseOrderSubformEXT extends "Purchase Order Subform"
                             end;
                         end;
                     Until PurchaseLineRec.Next = 0;
+                PurchaseLineRec.RESET;
+                PurchaseLineRec.SetRange("Document No.", Rec."Document No.");
+                IF PurchaseLineRec.FindFirst THEN begin
+                    repeat
+                        PurchaseLineRec."WHT Amount" := TotalWHTAmount;
+                        PurchaseLineRec."Net Amount" := TotalNetAmount;
+                        PurchaseLineRec.Modify();
+                    until PurchaseLineRec.Next = 0;
+                end;
 
-                Rec."WHT Amount" := TotalWHTAmount;
-                Rec."Net Amount" := TotalNetAmount;
             end;
         }
         modify(Quantity)
@@ -77,9 +84,16 @@ pageextension 50113 PurchaseOrderSubformEXT extends "Purchase Order Subform"
                             end;
                         end;
                     Until PurchaseLineRec.Next = 0;
+                PurchaseLineRec.RESET;
+                PurchaseLineRec.SetRange("Document No.", Rec."Document No.");
+                IF PurchaseLineRec.FindFirst THEN begin
+                    repeat
+                        PurchaseLineRec."WHT Amount" := TotalWHTAmount;
+                        PurchaseLineRec."Net Amount" := TotalNetAmount;
+                        PurchaseLineRec.Modify();
+                    until PurchaseLineRec.Next = 0;
+                end;
 
-                Rec."WHT Amount" := TotalWHTAmount;
-                Rec."Net Amount" := TotalNetAmount;
             end;
         }
     }
