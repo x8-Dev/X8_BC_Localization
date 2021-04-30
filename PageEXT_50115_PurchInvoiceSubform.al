@@ -29,12 +29,14 @@ pageextension 50115 PurchInvoiceSubformEXT extends "Purch. Invoice Subform"
             trigger OnAfterValidate()
             begin
                 WHTPostingSetupRec.SetRange("WHT Business Posting Group", Rec."WHT Business Posting Group");
-                IF WHTPostingSetupRec."Realized WHT Type" = WHTPostingSetupRec."Realized WHT Type"::Invoice THEN begin
-                    IF Rec."VAT %" > 0 THEN begin
-                        PurchaseHeaderRec.SetRange("No.", Rec."Document No.");
-                        IF PurchaseHeaderRec."Prices Including VAT" = false Then begin
-                            Rec."WHT Amount" := Rec."VAT Base Amount" * (WHTPostingSetupRec."WHT Percentage" / 100);
-                            Rec."Net Amount" := Rec."Amount Including VAT" - Rec."WHT Amount";
+                IF WHTPostingSetupRec.FINDFIRST THEN begin
+                    IF WHTPostingSetupRec."Realized WHT Type" = WHTPostingSetupRec."Realized WHT Type"::Invoice THEN begin
+                        IF Rec."VAT %" > 0 THEN begin
+                            PurchaseHeaderRec.SetRange("No.", Rec."Document No.");
+                            IF PurchaseHeaderRec."Prices Including VAT" = false Then begin
+                                Rec."WHT Amount" := Rec."VAT Base Amount" * (WHTPostingSetupRec."WHT Percentage" / 100);
+                                Rec."Net Amount" := Rec."Amount Including VAT" - Rec."WHT Amount";
+                            end;
                         end;
                     end;
                 end;
@@ -45,12 +47,14 @@ pageextension 50115 PurchInvoiceSubformEXT extends "Purch. Invoice Subform"
             trigger OnAfterValidate()
             begin
                 WHTPostingSetupRec.SetRange("WHT Business Posting Group", Rec."WHT Business Posting Group");
-                IF WHTPostingSetupRec."Realized WHT Type" = WHTPostingSetupRec."Realized WHT Type"::Invoice THEN begin
-                    IF Rec."VAT %" > 0 THEN begin
-                        PurchaseHeaderRec.SetRange("No.", Rec."Document No.");
-                        IF PurchaseHeaderRec."Prices Including VAT" = false Then begin
-                            Rec."WHT Amount" := Rec."VAT Base Amount" * (WHTPostingSetupRec."WHT Percentage" / 100);
-                            Rec."Net Amount" := Rec."Amount Including VAT" - Rec."WHT Amount";
+                IF WHTPostingSetupRec.FINDFIRST THEN begin
+                    IF WHTPostingSetupRec."Realized WHT Type" = WHTPostingSetupRec."Realized WHT Type"::Invoice THEN begin
+                        IF Rec."VAT %" > 0 THEN begin
+                            PurchaseHeaderRec.SetRange("No.", Rec."Document No.");
+                            IF PurchaseHeaderRec."Prices Including VAT" = false Then begin
+                                Rec."WHT Amount" := Rec."VAT Base Amount" * (WHTPostingSetupRec."WHT Percentage" / 100);
+                                Rec."Net Amount" := Rec."Amount Including VAT" - Rec."WHT Amount";
+                            end;
                         end;
                     end;
                 end;
@@ -65,6 +69,6 @@ pageextension 50115 PurchInvoiceSubformEXT extends "Purch. Invoice Subform"
 
     var
         myInt: Integer;
-        WHTPostingSetupRec: Record "WHT Posting Setup";
+        WHTPostingSetupRec: Record "WHT Posting Set";
         PurchaseHeaderRec: Record "Purchase Header";
 }

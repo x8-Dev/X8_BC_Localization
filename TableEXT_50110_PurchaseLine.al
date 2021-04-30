@@ -16,11 +16,13 @@ tableextension 50110 PurchaseLineEXT extends "Purchase Line"
         {
             DataClassification = ToBeClassified;
             Caption = 'Total WHT';
+            Editable = false;
         }
         field(50103; "Net Amount"; Decimal)
         {
             DataClassification = ToBeClassified;
             Caption = 'Total Net Amount';
+            Editable = false;
         }
     }
 

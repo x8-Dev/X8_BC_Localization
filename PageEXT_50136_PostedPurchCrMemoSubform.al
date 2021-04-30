@@ -13,6 +13,17 @@ pageextension 50136 PostedPurchCrMemoSubformEXT extends "Posted Purch. Cr. Memo 
                 ApplicationArea = All;
             }
         }
+        addafter("Total Amount Incl. VAT")
+        {
+            field("WHT Amount"; Rec."WHT Amount")
+            {
+                ApplicationArea = All;
+            }
+            field("Net Amount"; Rec."Net Amount")
+            {
+                ApplicationArea = All;
+            }
+        }
     }
 
     actions
