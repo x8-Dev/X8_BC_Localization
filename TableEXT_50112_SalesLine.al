@@ -16,16 +16,16 @@ tableextension 50112 SalesLineEXT extends "Sales line"
         {
             DataClassification = ToBeClassified;
             Caption = 'Total WHT';
+            Editable = false;
 
         }
         field(50103; "Net Amount"; Decimal)
         {
             DataClassification = ToBeClassified;
             Caption = 'Total Net Amount';
+            Editable = false;
         }
+
     }
 
-
-    var
-        myInt: Integer;
 }

@@ -93,7 +93,6 @@ pageextension 50113 PurchaseOrderSubformEXT extends "Purchase Order Subform"
         myInt: Integer;
         TotalWHTAmount: Decimal;
         TotalNetAmount: Decimal;
-        TotalIncludingVAT: Decimal;
         WHTPostingSetupRec: Record "WHT Posting Set";
         PurchaseHeaderRec: Record "Purchase Header";
         PurchaseLineRec: Record "Purchase Line";

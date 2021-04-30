@@ -13,6 +13,19 @@ pageextension 50140 PostedSalesCreditMemoSubfrmEXT extends "Posted Sales Cr. Mem
                 ApplicationArea = All;
             }
         }
+        addafter("Total Amount Incl. VAT")
+        {
+            field("WHT Amount"; rec."WHT Amount")
+            {
+                ApplicationArea = All;
+            }
+            field("Net Amount"; rec."Net Amount")
+            {
+                ApplicationArea = All;
+            }
+
+        }
+
     }
 
     actions
