@@ -2,15 +2,18 @@ pageextension 50100 GeneralLedgerSetupEXT extends "General Ledger Setup"
 {
     layout
     {
-        addafter("Allow Posting From")
+        addafter(General)
         {
-            field("Enable Phil. With. Tax"; Rec."Enable Phil. With. Tax")
+            group("BIR Localization")
             {
-                ApplicationArea = all;
-            }
-            field("Manual Calc. of WHT Sales"; Rec."Manual Calc. of WHT Sales")
-            {
-                ApplicationArea = all;
+                field("Enable Phil. With. Tax"; Rec."Enable Phil. With. Tax")
+                {
+                    ApplicationArea = all;
+                }
+                field("Manual Calc. of WHT Sales"; Rec."Manual Calc. of WHT Sales")
+                {
+                    ApplicationArea = all;
+                }
             }
         }
     }

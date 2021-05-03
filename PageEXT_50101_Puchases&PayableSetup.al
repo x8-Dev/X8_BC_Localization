@@ -2,17 +2,19 @@ pageextension 50101 PurchasesAndPayablesSetupEXT extends "Purchases & Payables S
 {
     layout
     {
-        addafter("Discount Posting")
+        addafter(General)
         {
-            field("Enable Print of 2307"; Rec."Enable Print of 2307")
+            group("BIR Localization")
             {
-                ApplicationArea = All;
+                field("Enable Print of 2307"; Rec."Enable Print of 2307")
+                {
+                    ApplicationArea = All;
+                }
+                field("Post Dated Check - Purchase"; Rec."Post Dated Check - Purchase")
+                {
+                    ApplicationArea = All;
+                }
             }
-            field("Post Dated Check - Purchase"; Rec."Post Dated Check - Purchase")
-            {
-                ApplicationArea = All;
-            }
-
         }
     }
 
