@@ -2,11 +2,16 @@ pageextension 50102 SalesAndReceivableSetup extends "Sales & Receivables Setup"
 {
     layout
     {
-        addbefore("Stockout Warning")
+        addafter(General)
         {
-            field("Post Dated Check - Sales"; Rec."Post Dated Check - Sales")
+            group("BIR Localization")
             {
-                ApplicationArea = All;
+
+                field("Post Dated Check - Sales"; Rec."Post Dated Check - Sales")
+                {
+                    ApplicationArea = All;
+                }
+
             }
         }
     }
