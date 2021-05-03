@@ -1,14 +1,16 @@
-pageextension 50107 ItemEXT extends "Item Card"
+pageextension 50143 ResourceCardEXT extends "Resource Card"
 {
     layout
     {
-        addafter("Inventory Posting Group")
+        addlast(Invoicing)
         {
-            field("WHT Product Posting Group"; rec."WHT Product Posting Group")
+            field("WHT Product Posting Group"; Rec."WHT Product Posting Group")
             {
                 ApplicationArea = All;
                 ShowMandatory = true;
+
             }
+
         }
     }
 

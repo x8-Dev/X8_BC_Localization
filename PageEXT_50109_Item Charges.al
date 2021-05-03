@@ -7,6 +7,7 @@ pageextension 50109 ItemChargesEXT extends "Item Charges"
             field("WHT Product Posting Group"; Rec."WHT Product Posting Group")
             {
                 ApplicationArea = All;
+                ShowMandatory = true;
             }
         }
     }
