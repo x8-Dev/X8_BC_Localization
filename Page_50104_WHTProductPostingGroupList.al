@@ -1,10 +1,10 @@
-page 50104 "WHT Product Posting Group List"
+page 50104 "WHT Product Posting Group"
 {
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Administration;
     SourceTable = "WHT Product Posting Group";
-    CardPageId = "WHT Product Posting Group List";
+
 
     layout
     {

@@ -4,7 +4,6 @@ page 50100 "WHT Business Posting Group"
     ApplicationArea = All;
     UsageCategory = Administration;
     SourceTable = "WHT Business Posting Group";
-    CardPageId = "WHT Bus. Posting Group Card";
 
     layout
     {
