@@ -12,18 +12,20 @@ pageextension 50129 SalesReturnOrderSubformEXT extends "Sales Return Order Subfo
             {
                 ApplicationArea = All;
             }
+
         }
         addafter("Total Amount Incl. VAT")
         {
-            field("WHT Amount"; rec."WHT Amount")
+
+            field("Total WHT"; decWHTAmountTotals)
             {
                 ApplicationArea = All;
-
+                Editable = false;
             }
-            field("Net Amount"; rec."Net Amount")
+            field("Total Net Amount"; decNetAmountTotals)
             {
                 ApplicationArea = All;
-
+                Editable = false;
             }
 
         }
@@ -31,68 +33,100 @@ pageextension 50129 SalesReturnOrderSubformEXT extends "Sales Return Order Subfo
         {
             trigger OnAfterValidate()
             begin
-                if rec."Unit Price" = 0 then begin
 
-                end else begin
+                CurrPage.Update();
+                Rec."WHT Amount" := 0;
+                Rec."Net Amount" := 0;
+                decWHTAmount := 0;
+                decNetAmount := 0;
 
-                    Rec."WHT Amount" := 0;
-                    Rec."Net Amount" := 0;
+                SalesHeaderRec.reset;
+                SalesHeaderRec.SetRange("No.", rec."Document No.");
+                if SalesHeaderRec.Find('-') then
+                    IF SalesHeaderRec."Prices Including VAT" = false Then begin
 
-                    SalesHeaderRec.reset;
-                    SalesHeaderRec.SetRange("No.", rec."Document No.");
-                    if SalesHeaderRec.FindFirst() then begin
+                        SalesLineRec.reset;
+                        SalesLineRec.SetRange("Document No.", SalesHeaderRec."No.");
+                        SalesLineRec.SetRange("Line No.", rec."Line No.");
+                        if SalesLineRec.find('-') then begin
 
-                        IF SalesHeaderRec."Prices Including VAT" = false Then begin
+                            WHTPostingSetupRec.SetRange("WHT Business Posting Group", SalesLineRec."WHT Business Posting Group");
+                            WHTPostingSetupRec.SetRange("WHT Product Posting Group", SalesLineRec."WHT Product Posting Group");
+                            IF WHTPostingSetupRec.FIND('-') THEN begin
 
-                            SalesLineRec.reset;
-                            SalesLineRec.SetRange("Document No.", SalesHeaderRec."No.");
-                            if SalesLineRec.find('-') then begin
-                                repeat
-
-                                    WHTPostingSetupRec.SetRange("WHT Business Posting Group", SalesLineRec."WHT Business Posting Group");
-                                    WHTPostingSetupRec.SetRange("WHT Product Posting Group", SalesLineRec."WHT Product Posting Group");
-                                    IF WHTPostingSetupRec.FIND('-') THEN begin
-
-                                        Message(format(SalesLineRec."VAT Base Amount"));
-                                        decWHTAmount := SalesLineRec."VAT Base Amount" * (WHTPostingSetupRec."WHT Percentage" / 100);
-
-                                        rec."WHT Amount" += decWHTAmount;
-
-                                        decNetAmount := SalesLineRec."Amount Including VAT" - SalesLineRec."WHT Amount";
-
-                                        rec."Net Amount" += decNetAmount;
-
-                                    end;
-
-                                until SalesLineRec.next = 0;
+                                //Message(format(rec."WHT Amount"));
+                                //Message(Format(rec."Line No."));
+                                decWHTAmount := decWHTAmount + (SalesLineRec."VAT Base Amount" * (WHTPostingSetupRec."WHT Percentage" / 100));
+                                decNetAmount := decNetAmount + (SalesLineRec."Amount Including VAT" - decWHTAmount);
+                                rec."WHT Amount" := decWHTAmount;
+                                rec."Net Amount" := decNetAmount;
+                                CurrPage.Update();
                             end;
-
-                        end else begin
-
                         end;
                     end;
 
+                decWHTAmountTotals := 0;
+                recWHTAmountTotals.reset;
+                recWHTAmountTotals.SetRange("Document No.", SalesHeaderRec."No.");
+                if recWHTAmountTotals.find('-') then begin
+                    repeat
+                        recWHTAmountTotals.CalcSums("WHT Amount");
+                        recWHTAmountTotals.CalcSums("Net Amount");
+                        decWHTAmountTotals := recWHTAmountTotals."WHT Amount";
+                        decNetAmountTotals := recWHTAmountTotals."Net Amount";
+                        CurrPage.Update();
+                    until recWHTAmountTotals.next = 0;
                 end;
 
             end;
-
         }
         modify(Quantity)
         {
             trigger OnAfterValidate()
             begin
-                WHTPostingSetupRec.SetRange("WHT Business Posting Group", Rec."WHT Business Posting Group");
-                IF WHTPostingSetupRec.FINDFIRST THEN begin
-                    IF WHTPostingSetupRec."Realized WHT Type" = WHTPostingSetupRec."Realized WHT Type"::Invoice THEN begin
-                        IF Rec."VAT %" > 0 THEN begin
-                            SalesHeaderRec.SetRange("No.", Rec."Document No.");
-                            IF SalesHeaderRec."Prices Including VAT" = false Then begin
-                                Rec."WHT Amount" := Rec."VAT Base Amount" * (WHTPostingSetupRec."WHT Percentage" / 100);
-                                Rec."Net Amount" := Rec."Amount Including VAT" - Rec."WHT Amount";
+
+                CurrPage.Update();
+                Rec."WHT Amount" := 0;
+                Rec."Net Amount" := 0;
+                decWHTAmount := 0;
+                decNetAmount := 0;
+
+                SalesHeaderRec.reset;
+                SalesHeaderRec.SetRange("No.", rec."Document No.");
+                if SalesHeaderRec.Find('-') then
+                    IF SalesHeaderRec."Prices Including VAT" = false Then begin
+
+                        SalesLineRec.reset;
+                        SalesLineRec.SetRange("Document No.", SalesHeaderRec."No.");
+                        SalesLineRec.SetRange("Line No.", rec."Line No.");
+                        if SalesLineRec.find('-') then begin
+
+                            WHTPostingSetupRec.SetRange("WHT Business Posting Group", SalesLineRec."WHT Business Posting Group");
+                            WHTPostingSetupRec.SetRange("WHT Product Posting Group", SalesLineRec."WHT Product Posting Group");
+                            IF WHTPostingSetupRec.FIND('-') THEN begin
+
+                                decWHTAmount := decWHTAmount + (SalesLineRec."VAT Base Amount" * (WHTPostingSetupRec."WHT Percentage" / 100));
+                                decNetAmount := decNetAmount + (SalesLineRec."Amount Including VAT" - decWHTAmount);
+                                rec."WHT Amount" := decWHTAmount;
+                                rec."Net Amount" := decNetAmount;
+                                CurrPage.Update();
                             end;
                         end;
                     end;
+
+                decWHTAmountTotals := 0;
+                recWHTAmountTotals.reset;
+                recWHTAmountTotals.SetRange("Document No.", SalesHeaderRec."No.");
+                if recWHTAmountTotals.find('-') then begin
+                    repeat
+                        recWHTAmountTotals.CalcSums("WHT Amount");
+                        recWHTAmountTotals.CalcSums("Net Amount");
+                        decWHTAmountTotals := recWHTAmountTotals."WHT Amount";
+                        decNetAmountTotals := recWHTAmountTotals."Net Amount";
+                        CurrPage.Update();
+                    until recWHTAmountTotals.next = 0;
                 end;
+
             end;
         }
     }
@@ -109,4 +143,7 @@ pageextension 50129 SalesReturnOrderSubformEXT extends "Sales Return Order Subfo
         SalesLineRec: Record "Sales Line";
         decWHTAmount: Decimal;
         decNetAmount: Decimal;
+        decWHTAmountTotals: Decimal;
+        decNetAmountTotals: Decimal;
+        recWHTAmountTotals: Record "Sales Line";
 }
