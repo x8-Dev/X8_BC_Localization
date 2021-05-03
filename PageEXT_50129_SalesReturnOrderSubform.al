@@ -19,6 +19,7 @@ pageextension 50129 SalesReturnOrderSubformEXT extends "Sales Return Order Subfo
 
                     SalesHeaderRec.reset;
                     SalesHeaderRec.SetRange("No.", rec."Document No.");
+                    SalesHeaderRec.SetRange("Document Type", SalesHeaderRec."Document Type"::"Return Order");
                     if SalesHeaderRec.Find('-') then
                         IF SalesHeaderRec."Prices Including VAT" = false Then begin
 
@@ -73,6 +74,7 @@ pageextension 50129 SalesReturnOrderSubformEXT extends "Sales Return Order Subfo
 
                     SalesHeaderRec.reset;
                     SalesHeaderRec.SetRange("No.", rec."Document No.");
+                    SalesHeaderRec.SetRange("Document Type", SalesHeaderRec."Document Type"::"Return Order");
                     if SalesHeaderRec.Find('-') then
                         IF SalesHeaderRec."Prices Including VAT" = false Then begin
 
@@ -140,6 +142,7 @@ pageextension 50129 SalesReturnOrderSubformEXT extends "Sales Return Order Subfo
 
                 SalesHeaderRec.reset;
                 SalesHeaderRec.SetRange("No.", rec."Document No.");
+                SalesHeaderRec.SetRange("Document Type", SalesHeaderRec."Document Type"::"Return Order");
                 if SalesHeaderRec.Find('-') then
                     IF SalesHeaderRec."Prices Including VAT" = false Then begin
 
@@ -190,6 +193,7 @@ pageextension 50129 SalesReturnOrderSubformEXT extends "Sales Return Order Subfo
 
                 SalesHeaderRec.reset;
                 SalesHeaderRec.SetRange("No.", rec."Document No.");
+                SalesHeaderRec.SetRange("Document Type", SalesHeaderRec."Document Type"::"Return Order");
                 if SalesHeaderRec.Find('-') then
                     IF SalesHeaderRec."Prices Including VAT" = false Then begin
 
@@ -230,7 +234,44 @@ pageextension 50129 SalesReturnOrderSubformEXT extends "Sales Return Order Subfo
         modify("No.")
         {
             trigger OnAfterValidate()
+
             begin
+                CurrPage.Update();
+
+                recItems.reset;
+                recItems.SetRange("No.", rec."No.");
+                if recitems.FIND('-') then begin
+
+                    SalesLineRec.reset;
+                    SalesLineRec.SetRange("Document Type", SalesLineRec."Document Type"::"Return Order");
+                    SalesLineRec.SetRange("Document No.", rec."Document No.");
+                    SalesLineRec.SetRange("No.", recitems."No.");
+                    SalesLineRec.SetRange("Line No.", rec."Line No.");
+                    if SalesLineRec.FIND('-') then begin
+
+                        Rec."WHT Product Posting Group" := recItems."WHT Product Posting Group";
+                        CurrPage.Update();
+                    end;
+
+                    recCustomer.Reset();
+                    recCustomer.SetRange("No.", rec."Sell-to Customer No.");
+                    if recCustomer.FIND('-') then begin
+
+                        SalesLineRec.reset;
+                        SalesLineRec.SetRange("Document Type", SalesLineRec."Document Type"::"Return Order");
+                        SalesLineRec.SetRange("Document No.", rec."Document No.");
+                        SalesLineRec.SetRange("No.", recitems."No.");
+                        SalesLineRec.SetRange("Line No.", rec."Line No.");
+                        if SalesLineRec.FIND('-') then begin
+
+                            Rec."WHT Business Posting Group" := recCustomer."WHT Business Posting Group";
+                            CurrPage.Update();
+                        end;
+                    end;
+
+                end;
+
+
 
             end;
         }
@@ -244,12 +285,23 @@ pageextension 50129 SalesReturnOrderSubformEXT extends "Sales Return Order Subfo
 
     var
         myInt: Integer;
+
         WHTPostingSetupRec: Record "WHT Posting Set";
+
         SalesHeaderRec: Record "Sales Header";
+
         SalesLineRec: Record "Sales Line";
+
         decWHTAmount: Decimal;
+
         decNetAmount: Decimal;
         decWHTAmountTotals: Decimal;
+
         decNetAmountTotals: Decimal;
+
         recWHTAmountTotals: Record "Sales Line";
+
+        recItems: Record Item;
+
+        recCustomer: Record Customer;
 }
