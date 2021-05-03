@@ -7,6 +7,7 @@ pageextension 50105 VendorCardEXT extends "Vendor Card"
             field("WHT Business Posting Group"; Rec."WHT Business Posting Grp")
             {
                 ApplicationArea = All;
+                ShowMandatory = true;
             }
         }
     }

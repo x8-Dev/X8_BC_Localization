@@ -7,6 +7,7 @@ pageextension 50106 CustomerCardEXT extends "Customer Card"
             field("WHT Business Posting Group"; Rec."WHT Business Posting Group")
             {
                 ApplicationArea = All;
+                ShowMandatory = true;
             }
         }
     }
