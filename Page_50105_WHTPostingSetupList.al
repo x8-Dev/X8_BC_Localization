@@ -1,4 +1,4 @@
-page 50105 "WHT Posting Setup List"
+page 50105 "WHT Posting Setup"
 {
     PageType = List;
     ApplicationArea = All;
