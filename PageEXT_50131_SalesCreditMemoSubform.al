@@ -284,5 +284,39 @@ pageextension 50131 SalesCreditMemoSubformEXT extends "Sales Cr. Memo Subform"
         recWHTAmountTotals: Record "Sales Line";
         recItems: Record Item;
         recCustomer: Record Customer;
+        bolOnOpenPage: Boolean;
 
+    trigger OnOpenPage()
+
+    begin
+
+        bolOnOpenPage := true;
+
+    end;
+
+    trigger OnAfterGetRecord()
+
+    begin
+
+        if bolOnOpenPage = true then begin
+
+            decWHTAmountTotals := 0;
+            decNetAmountTotals := 0;
+            recWHTAmountTotals.reset;
+            recWHTAmountTotals.SetRange("Document No.", rec."Document No.");
+            recWHTAmountTotals.SetRange("Document Type", rec."Document Type"::"Credit Memo");
+            if recWHTAmountTotals.find('-') then begin
+                repeat
+                    recWHTAmountTotals.CalcSums("WHT Amount");
+                    recWHTAmountTotals.CalcSums("Net Amount");
+                    decWHTAmountTotals := recWHTAmountTotals."WHT Amount";
+                    decNetAmountTotals := recWHTAmountTotals."Net Amount";
+                until recWHTAmountTotals.next = 0;
+            end;
+
+        end else begin
+
+        end;
+
+    end;
 }
