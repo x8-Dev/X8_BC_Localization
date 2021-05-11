@@ -4,7 +4,7 @@ pageextension 50107 ItemEXT extends "Item Card"
     {
         addafter("Inventory Posting Group")
         {
-            field("WHT Product Posting Group"; rec."WHT Product Posting Group")
+            field("WHT Product Posting Group"; Rec."WHT Product Posting Group")
             {
                 ApplicationArea = All;
                 ShowMandatory = true;
