@@ -7,69 +7,148 @@ pageextension 50111 PuchaseQuoteSubformEXT extends "Purchase Quote Subform"
             field("WHT Business Posting Group"; Rec."WHT Business Posting Group")
             {
                 ApplicationArea = All;
+                trigger OnValidate()
+                var
+                    myInt: Integer;
+                begin
+                    GetTotalWHTAndNetAmount();
+                end;
             }
             field("WHT Product Posting Group"; Rec."WHT Product Posting Group")
             {
                 ApplicationArea = All;
+                trigger OnValidate()
+                var
+                    myInt: Integer;
+                begin
+                    GetTotalWHTAndNetAmount();
+                end;
             }
         }
         addafter("Total Amount Incl. VAT")
         {
-            field("WHT Amount"; Rec."WHT Amount")
+            field("WHT Amount"; decWHTAmount)
             {
                 ApplicationArea = All;
             }
-            field("Net Amount"; Rec."Net Amount")
+            field("Net Amount"; decNetAmount)
             {
                 ApplicationArea = All;
             }
+        }
+        modify("No.")
+        {
+            trigger OnAfterValidate()
+            var
+                ItemRec: Record Item;
+                VendorRec: Record Vendor;
+            begin
+                ItemRec.Reset;
+                ItemRec.SetRange("No.", Rec."No.");
+                IF ItemRec.FindFirst Then begin
+                    Rec."WHT Product Posting Group" := ItemRec."WHT Product Posting Group";
+                    Rec.Modify();
+                end;
+
+                VendorRec.Reset;
+                VendorRec.SetRange("No.", Rec."Buy-from Vendor No.");
+                IF VendorRec.FindFirst then begin
+                    Rec."WHT Business Posting Group" := VendorRec."WHT Business Posting Grp";
+                    Rec.Modify();
+                end;
+            end;
         }
         modify("Unit Price (LCY)")
         {
             trigger OnAfterValidate()
             begin
-                WHTPostingSetupRec.SetRange("WHT Business Posting Group", Rec."WHT Business Posting Group");
-                IF WHTPostingSetupRec.FINDFIRST THEN begin
-                    IF WHTPostingSetupRec."Realized WHT Type" = WHTPostingSetupRec."Realized WHT Type"::Invoice THEN begin
-                        IF Rec."VAT %" > 0 THEN begin
-                            PurchaseHeaderRec.SetRange("No.", Rec."Document No.");
-                            IF PurchaseHeaderRec."Prices Including VAT" = false Then begin
-                                Rec."WHT Amount" := Rec."VAT Base Amount" * (WHTPostingSetupRec."WHT Percentage" / 100);
-                                Rec."Net Amount" := Rec."Amount Including VAT" - Rec."WHT Amount";
-                            end;
-                        end;
-                    end;
-                end;
+                GetTotalWHTAndNetAmount();
             end;
         }
         modify(Quantity)
         {
             trigger OnAfterValidate()
             begin
-                WHTPostingSetupRec.SetRange("WHT Business Posting Group", Rec."WHT Business Posting Group");
-                IF WHTPostingSetupRec.FINDFIRST THEN begin
-                    IF WHTPostingSetupRec."Realized WHT Type" = WHTPostingSetupRec."Realized WHT Type"::Invoice THEN begin
-                        IF Rec."VAT %" > 0 THEN begin
-                            PurchaseHeaderRec.SetRange("No.", Rec."Document No.");
-                            IF PurchaseHeaderRec."Prices Including VAT" = false Then begin
-                                Rec."WHT Amount" := Rec."VAT Base Amount" * (WHTPostingSetupRec."WHT Percentage" / 100);
-                                Rec."Net Amount" := Rec."Amount Including VAT" - Rec."WHT Amount";
-                            end;
-                        end;
-                    end;
-                end;
+                GetTotalWHTAndNetAmount();
             end;
         }
     }
+
 
     actions
     {
         // Add changes to page actions here
     }
 
+    local procedure GetTotalWHTAndNetAmount()
+    var
+        PurchaseHeaderRec: Record "Purchase Header";
+        PurchaseLineRec: Record "Purchase Line";
+        decWHTAmountTotals: Decimal;
+        decNetAmountTotals: Decimal;
+        recPurchaseLine: Record "Purchase Line";
+    begin
+        CurrPage.Update();
+        Rec."WHT Amount" := 0;
+        Rec."Net Amount" := 0;
+        decWHTAmount := 0;
+        decNetAmount := 0;
+
+        PurchaseHeaderRec.reset;
+        PurchaseHeaderRec.SetRange("No.", rec."Document No.");
+        PurchaseHeaderRec.SetRange("Document Type", PurchaseHeaderRec."Document Type"::"Order");
+        if PurchaseHeaderRec.Find('-') then
+            IF PurchaseHeaderRec."Prices Including VAT" = false Then begin
+                PurchaseLineRec.reset;
+                PurchaseLineRec.SetRange("Document No.", PurchaseHeaderRec."No.");
+                if PurchaseLineRec.find('-') then begin
+                    repeat
+                        WHTPostingSetupRec.SetRange("WHT Business Posting Group", PurchaseLineRec."WHT Business Posting Group");
+                        WHTPostingSetupRec.SetRange("WHT Product Posting Group", PurchaseLineRec."WHT Product Posting Group");
+                        IF WHTPostingSetupRec.FIND('-') THEN begin
+                            decWHTAmount := decWHTAmount + (PurchaseLineRec."VAT Base Amount" * (WHTPostingSetupRec."WHT Percentage" / 100));
+                            decNetAmount := decNetAmount + (PurchaseLineRec."Amount Including VAT" - decWHTAmount);
+                            rec."WHT Amount" := decWHTAmount;
+                            rec."Net Amount" := decNetAmount;
+                            CurrPage.Update();
+                        end;
+                    until PurchaseLineRec.next = 0;
+                end;
+            end;
+
+        decWHTAmountTotals := 0;
+        recPurchaseLine.reset;
+        recPurchaseLine.SetRange("Document No.", PurchaseHeaderRec."No.");
+        if recPurchaseLine.find('-') then begin
+            repeat
+                recPurchaseLine.CalcSums("WHT Amount");
+                recPurchaseLine.CalcSums("Net Amount");
+                decWHTAmountTotals := recPurchaseLine."WHT Amount";
+                decNetAmountTotals := recPurchaseLine."Net Amount";
+                CurrPage.Update();
+            until recPurchaseLine.next = 0;
+        end;
+
+    end;
+
     var
         myInt: Integer;
         WHTPostingSetupRec: Record "WHT Posting Set";
         PurchaseHeaderRec: Record "Purchase Header";
+        decWHTAmount: Decimal;
+        decNetAmount: Decimal;
+        bolOnOpenPage: Boolean;
+
+    trigger OnOpenPage()
+
+    begin
+        bolOnOpenPage := true;
+    end;
+
+    trigger OnAfterGetRecord()
+
+    begin
+        GetTotalWHTAndNetAmount();
+    end;
 
 }

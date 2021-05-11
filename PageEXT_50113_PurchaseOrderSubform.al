@@ -11,7 +11,7 @@ pageextension 50113 PurchaseOrderSubformEXT extends "Purchase Order Subform"
                 var
                     myInt: Integer;
                 begin
-                    //GetTotalWHTAndNetAmount();
+                    GetTotalWHTAndNetAmount();
                 end;
 
             }
@@ -22,7 +22,7 @@ pageextension 50113 PurchaseOrderSubformEXT extends "Purchase Order Subform"
                 var
                     myInt: Integer;
                 begin
-                    // GetTotalWHTAndNetAmount();
+                    GetTotalWHTAndNetAmount();
                 end;
             }
         }
@@ -43,7 +43,7 @@ pageextension 50113 PurchaseOrderSubformEXT extends "Purchase Order Subform"
             var
                 myInt: Integer;
             begin
-                //GetTotalWHTAndNetAmount();
+                GetTotalWHTAndNetAmount();
             end;
         }
         modify("No.")
@@ -72,7 +72,7 @@ pageextension 50113 PurchaseOrderSubformEXT extends "Purchase Order Subform"
         {
             trigger OnAfterValidate()
             begin
-                //GetTotalWHTAndNetAmount();
+                GetTotalWHTAndNetAmount();
             end;
         }
         modify(Quantity)
@@ -102,6 +102,8 @@ pageextension 50113 PurchaseOrderSubformEXT extends "Purchase Order Subform"
         Rec."Net Amount" := 0;
         decWHTAmount := 0;
         decNetAmount := 0;
+        decWHTAmountTotals := 0;
+        decNetAmountTotals := 0;
 
         PurchaseHeaderRec.reset;
         PurchaseHeaderRec.SetRange("No.", rec."Document No.");
@@ -111,20 +113,18 @@ pageextension 50113 PurchaseOrderSubformEXT extends "Purchase Order Subform"
 
                 PurchaseLineRec.reset;
                 PurchaseLineRec.SetRange("Document No.", PurchaseHeaderRec."No.");
-                PurchaseLineRec.SetRange("Line No.", rec."Line No.");
                 if PurchaseLineRec.find('-') then begin
-
-                    WHTPostingSetupRec.SetRange("WHT Business Posting Group", PurchaseLineRec."WHT Business Posting Group");
-                    WHTPostingSetupRec.SetRange("WHT Product Posting Group", PurchaseLineRec."WHT Product Posting Group");
-                    IF WHTPostingSetupRec.FIND('-') THEN begin
-
-                        decWHTAmount := decWHTAmount + (PurchaseLineRec."VAT Base Amount" * (WHTPostingSetupRec."WHT Percentage" / 100));
-                        decNetAmount := decNetAmount + (PurchaseLineRec."Amount Including VAT" - decWHTAmount);
-                        rec."WHT Amount" := decWHTAmount;
-                        rec."Net Amount" := decNetAmount;
-                        CurrPage.Update();
-
-                    end;
+                    repeat
+                        WHTPostingSetupRec.SetRange("WHT Business Posting Group", PurchaseLineRec."WHT Business Posting Group");
+                        WHTPostingSetupRec.SetRange("WHT Product Posting Group", PurchaseLineRec."WHT Product Posting Group");
+                        IF WHTPostingSetupRec.FIND('-') THEN begin
+                            decWHTAmount := decWHTAmount + (PurchaseLineRec."VAT Base Amount" * (WHTPostingSetupRec."WHT Percentage" / 100));
+                            decNetAmount := decNetAmount + (PurchaseLineRec."Amount Including VAT" - decWHTAmount);
+                            rec."WHT Amount" := decWHTAmount;
+                            rec."Net Amount" := decNetAmount;
+                            CurrPage.Update();
+                        end;
+                    until PurchaseLineRec.Next = 0;
                 end;
             end;
 
@@ -155,5 +155,18 @@ pageextension 50113 PurchaseOrderSubformEXT extends "Purchase Order Subform"
         VendorRec: Record Vendor;
         decWHTAmount: Decimal;
         decNetAmount: Decimal;
+        bolOnOpenPage: Boolean;
+
+    trigger OnOpenPage()
+
+    begin
+        GetTotalWHTAndNetAmount();
+    end;
+
+    trigger OnAfterGetRecord()
+
+    begin
+        // GetTotalWHTAndNetAmount();
+    end;
 
 }
