@@ -97,7 +97,7 @@ pageextension 50111 PuchaseQuoteSubformEXT extends "Purchase Quote Subform"
 
         PurchaseHeaderRec.reset;
         PurchaseHeaderRec.SetRange("No.", rec."Document No.");
-        PurchaseHeaderRec.SetRange("Document Type", PurchaseHeaderRec."Document Type"::"Order");
+        PurchaseHeaderRec.SetRange("Document Type", PurchaseHeaderRec."Document Type"::Quote);
         if PurchaseHeaderRec.Find('-') then
             IF PurchaseHeaderRec."Prices Including VAT" = false Then begin
 
@@ -158,7 +158,7 @@ pageextension 50111 PuchaseQuoteSubformEXT extends "Purchase Quote Subform"
             decWHTAmount := 0;
             recPurchaseLine.reset;
             recPurchaseLine.SetRange("Document No.", rec."Document No.");
-            recPurchaseLine.SetRange("Document Type", rec."Document Type"::Order);
+            recPurchaseLine.SetRange("Document Type", rec."Document Type"::Quote);
             if recPurchaseLine.find('-') then begin
                 repeat
                     decWHTAmount := decWHTAmount + recPurchaseLine."WHT Amount";
