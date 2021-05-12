@@ -9,6 +9,21 @@ pageextension 50116 PurchaseReturnOrderEXT extends "Purchase Return Order"
                 ApplicationArea = All;
             }
         }
+        modify("Buy-from Vendor No.")
+        {
+            trigger OnAfterValidate()
+            var
+                myInt: Integer;
+                VendorRec: Record Vendor;
+            begin
+                VendorRec.Reset;
+                VendorRec.SetRange("No.", Rec."Buy-from Vendor No.");
+                IF VendorRec.FindFirst() then begin
+                    Rec."WHT Business Posting Group" := VendorRec."WHT Business Posting Grp";
+                    Rec.Modify();
+                end;
+            end;
+        }
     }
 
     actions
