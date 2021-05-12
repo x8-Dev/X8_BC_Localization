@@ -5,7 +5,7 @@ tableextension 50102 SalesAndReceivableEXT extends "Sales & Receivables Setup"
         field(50100; "Post Dated Check - Sales"; Text[50])
         {
             DataClassification = ToBeClassified;
-            TableRelation = "Gen. Journal Batch"."Template Type" WHERE("Template Type" = FILTER("Cash Receipts"));
+            TableRelation = "Gen. Journal Batch".Name WHERE("Template Type" = FILTER("Cash Receipts"));
         }
     }
 

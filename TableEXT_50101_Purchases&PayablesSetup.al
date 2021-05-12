@@ -11,7 +11,7 @@ tableextension 50101 "Purchases&PayablesSetupEXT" extends "Purchases & Payables 
         {
             Caption = 'Post Dated Check - Purchases';
             DataClassification = ToBeClassified;
-            TableRelation = "Gen. Journal Batch"."Template Type" WHERE("Template Type" = FILTER(Payments));
+            TableRelation = "Gen. Journal Batch".Name WHERE("Template Type" = FILTER(Payments));
         }
     }
 
