@@ -161,8 +161,10 @@ pageextension 50111 PuchaseQuoteSubformEXT extends "Purchase Quote Subform"
             recPurchaseLine.SetRange("Document Type", rec."Document Type"::Quote);
             if recPurchaseLine.find('-') then begin
                 repeat
-                    decWHTAmount := decWHTAmount + recPurchaseLine."WHT Amount";
-                    decNetAmount := decNetAmount + recPurchaseLine."Net Amount";
+                    recPurchaseLine.CalcSums("WHT Amount");
+                    recPurchaseLine.CalcSums("Net Amount");
+                    decWHTAmount := recPurchaseLine."WHT Amount";
+                    decNetAmount := recPurchaseLine."Net Amount";
                 until recPurchaseLine.next = 0;
             end;
 

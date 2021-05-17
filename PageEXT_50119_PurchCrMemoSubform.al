@@ -131,4 +131,34 @@ pageextension 50119 MyExtension extends "Purch. Cr. Memo Subform"
         PurchaseLineRec: Record "Purchase Line";
         decWHTAmount: Decimal;
         decNetAmount: Decimal;
+        bolOnOpenPage: Boolean;
+        recPurchaseLine: Record "Purchase Line";
+
+
+    trigger OnOpenPage()
+
+    begin
+        bolOnOpenPage := true;
+    end;
+
+    trigger OnAfterGetRecord()
+
+    begin
+        if bolOnOpenPage = true then begin
+            decNetAmount := 0;
+            decWHTAmount := 0;
+            recPurchaseLine.reset;
+            recPurchaseLine.SetRange("Document No.", rec."Document No.");
+            recPurchaseLine.SetRange("Document Type", rec."Document Type"::"Credit Memo");
+            if recPurchaseLine.find('-') then begin
+                repeat
+                    recPurchaseLine.CalcSums("WHT Amount");
+                    recPurchaseLine.CalcSums("Net Amount");
+                    decWHTAmount := recPurchaseLine."WHT Amount";
+                    decNetAmount := recPurchaseLine."Net Amount";
+                until recPurchaseLine.next = 0;
+            end;
+        end;
+    end;
+
 }

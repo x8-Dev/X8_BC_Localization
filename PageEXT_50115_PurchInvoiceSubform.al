@@ -162,8 +162,10 @@ pageextension 50115 PurchInvoiceSubformEXT extends "Purch. Invoice Subform"
             recPurchaseLine.SetRange("Document Type", rec."Document Type"::Invoice);
             if recPurchaseLine.find('-') then begin
                 repeat
-                    decWHTAmount := decWHTAmount + recPurchaseLine."WHT Amount";
-                    decNetAmount := decNetAmount + recPurchaseLine."Net Amount";
+                    recPurchaseLine.CalcSums("WHT Amount");
+                    recPurchaseLine.CalcSums("Net Amount");
+                    decWHTAmount := recPurchaseLine."WHT Amount";
+                    decNetAmount := recPurchaseLine."Net Amount";
                 until recPurchaseLine.next = 0;
             end;
         end;
